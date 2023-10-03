@@ -1,0 +1,79 @@
+use crate::ast::{Node, Operation};
+
+#[LALR]
+grammar;
+
+pub GP = StmtList;
+
+StmtList: Box<Node> = List<Stmt> => Box::new(Node::Block(<>));
+List<T>: Vec<T> =
+    <mut v:(<T>)*> <e:T> => { v.push(e); v };
+
+Stmt = {
+	Block,
+	<Expr> "~~",
+	"(_|_)" <Expr> <Block> => Box::new(Node::While(<>)),
+}
+
+Block: Box<Node> = {
+	"Nya!" <StmtList> "nya~",
+}
+
+Expr = Set;
+
+Set: Box<Node> = {
+	<s:Identifier> ">///<" <e:Expr> => Box::new(Node::VarSet(s.to_string(), e)),
+	MathExpr,
+}
+
+BinaryOp<Op, Next>: Box<Node> = {
+	BinaryOp<Op, Next> Op Next => Box::new(Node::BinaryOp(<>)),
+	Next,
+}
+
+MathExpr: Box<Node> = BinaryOp<MathOp, Term>;
+MathOp: Operation = {
+	":3" => Operation::Add,
+	">:3" => Operation::Sub,
+}
+
+Term: Box<Node> = BinaryOp<TermOp, Prefix>;
+TermOp: Operation = {
+	r"[uU][wW][uU]" => Operation::Mul,
+	r"[oO][wW][oO]" => Operation::Div,
+	":P" => Operation::Mod,
+}
+
+Prefix: Box<Node> = {
+	"-" <Prefix> => Box::new(Node::UnaryNegate(<>)),
+	Factor,
+}
+
+Factor: Box<Node> = {
+	Integer,
+	String,
+	Identifier => Box::new(Node::Identifier(<>.to_string())),
+	"(" <MathExpr> ")"
+}
+
+Integer: Box<Node> = r"8=*D" => Box::new(Node::Integer(<>.len() as i64 - 2));
+String: Box<Node> = {
+	r#"/\*.*\*/"# => {
+		let mut str = <>.to_string();
+		str.pop();
+		str.pop();
+		str.remove(0);
+		str.remove(0);
+		Box::new(Node::String(str))
+	}
+}
+Identifier = r"[a-zA-Z_][a-zA-Z0-9_]*";
+
+match {
+	r"[oO][wW][oO]",
+	r"[uU][wW][uU]",
+} else {
+	r"[a-zA-Z_][a-zA-Z0-9_]*",
+	_,
+}
+
