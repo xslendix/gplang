@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-regex = { version = "1", features = ["unicode"] }
+regex = { version = "1" }
 lalrpop-util = { version = "0.20.0", features = ["lexer"] }
 clap = { version = "4.0", features = ["derive"] }
 

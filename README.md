@@ -44,6 +44,14 @@ Stwings take the fowwowing fowm:
 
 They awe not muwtiwine.
 
+##### Cwomments
+
+Cwomments can be dwone like sowo:
+
+```
+"Twis is a cwomment nya~~"
+```
+
 ## Wicense
 
 This pwowect is licensed undew the AGPLv3 Wicense - see the [LICENSE](LICENSE) file fow mowe detaiws.
