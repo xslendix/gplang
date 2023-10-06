@@ -20,6 +20,7 @@ enum Value {
     Integer(i64),
     String(String),
     Err,
+    None,
 }
 
 impl Value {
@@ -29,6 +30,7 @@ impl Value {
             Integer(x) => *x != 0,
             String(x) => x.len() != 0,
             Err => false,
+            None => false,
         }
     }
 }
@@ -40,6 +42,7 @@ impl Debug for Value {
             Integer(v) => write!(fmt, "{:?}", v),
             String(v) => write!(fmt, "{:?}", v),
             Err => write!(fmt, "Err"),
+            None => write!(fmt, "None"),
         }
     }
 }
@@ -99,6 +102,17 @@ impl ast::Node {
                     condv = val.is_truthy();
                 }
                 last_result
+            }
+            IfElse(expr, real, fake) => {
+                if expr.interpret(vars).is_truthy() {
+                    real.interpret(vars)
+                } else {
+                    if let Some(x) = fake {
+                        x.interpret(vars)
+                    } else {
+                        Value::None
+                    }
+                }
             }
         }
     }

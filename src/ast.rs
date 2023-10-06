@@ -10,6 +10,7 @@ pub enum Node {
 
     VarSet(String, Box<Node>),
     While(Box<Node>, Box<Node>),
+    IfElse(Box<Node>, Box<Node>, Option<Box<Node>>),
 }
 
 impl Debug for Node {
@@ -24,6 +25,7 @@ impl Debug for Node {
             Block(v) => write!(fmt, "Block{:?}", v),
             VarSet(name, v) => write!(fmt, "{} = {:?}", name, v),
             While(v, block) => write!(fmt, "While({:?})->{:?}", v, block),
+            IfElse(a, b, c) => write!(fmt, "If({:?})->{:?}->{:?}", a, b, c),
         }
     }
 }

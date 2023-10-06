@@ -12,7 +12,8 @@ List<T>: Vec<T> =
 Stmt = {
 	Block,
 	<Expr> "~~",
-	"(_|_)" <Expr> <Block> => Box::new(Node::While(<>)),
+	"(_Y_)" <Expr> <Block> => Box::new(Node::While(<>)),
+	"(.Y.)" <Expr> <Block> <(r"U+O+H+" <Block>)?> => Box::new(Node::IfElse(<>)),
 }
 
 Block: Box<Node> = {
@@ -72,6 +73,7 @@ Identifier = r"[a-zA-Z_][a-zA-Z0-9_]*";
 match {
 	r"[oO][wW][oO]",
 	r"[uU][wW][uU]",
+	r"U+O+H+",
 } else {
 	r"[a-zA-Z_][a-zA-Z0-9_]*",
 	_,
