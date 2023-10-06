@@ -52,6 +52,33 @@ Cwomments can be dwone like sowo:
 "Twis is a cwomment nya~~"
 ```
 
+##### butts
+
+butts can be considewed a-as an awtewnative t-to `whiwe`s i-in othew
+pwogwamming w-wanguages. 😳 i-if the condition i-is twuthy, XD t-then it keeps
+on e-executing. :3
+
+```
+aaa >///< 8=====d~~
+(_Y_) aaa Nya!
+    sum >///< sum :3 sum~~
+    a-aaa >///< aaa >:3~~
+nya~
+```
+
+##### boobs
+
+besides b-butts, -.- we have boobs as weww. ( ͡o ω ͡o ) t-those awe used instead
+of if-ewse. rawr x3
+
+```
+(.Y.) condition Nya!
+    "code to exekawaii~ w-when weaw~~"
+nya~ UOOOOOOHHHH Nya!
+    "c-code to exekawaii~ when fake~~"
+nya~
+```
+
 ## Wicense
 
 This pwowect is licensed undew the AGPLv3 Wicense - see the [LICENSE](LICENSE) file fow mowe detaiws.
