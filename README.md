@@ -1,4 +1,4 @@
-# GPLang - The language for those with Gracious Professionalism.
+# GPLang - The language for those with the mind on GP.
 
 This new, innovative, modern scripting language is one of the fastest, safest,
 and blazingly fast things in the entire world!
