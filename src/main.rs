@@ -49,6 +49,6 @@ fn main() {
         let root = parser.parse(&str);
         let root = root.unwrap();
         let val = root.interpret(&mut vars, &Vec::<Value>::new());
-        print!("{:?}\n", val);
+        //print!("{:?}\n", val);
     }
 }
