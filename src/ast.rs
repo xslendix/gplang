@@ -1,6 +1,9 @@
 use std::fmt::{Debug, Formatter};
 use std::rc::Rc;
 
+use crate::interpreter::Value;
+
+type BuiltInFunction = fn(Vec<Value>) -> Value;
 pub enum Node {
     BinaryOp(Rc<Node>, Operation, Rc<Node>),
     UnaryNegate(Rc<Node>),
@@ -14,6 +17,8 @@ pub enum Node {
     IfElse(Rc<Node>, Rc<Node>, Option<Rc<Node>>),
     FunctionDefinition(String, Vec<String>, Rc<Node>),
     FunctionCall(String, Vec<Rc<Node>>),
+
+    BuiltInNode(BuiltInFunction),
 }
 
 impl Debug for Node {
@@ -33,6 +38,7 @@ impl Debug for Node {
                 write!(fmt, "Fn({}, {:?}, {:?})", name, args, block)
             }
             FunctionCall(a, b) => write!(fmt, "{}({:?})", a, b),
+            BuiltInNode(_) => write!(fmt, "<Built-in>"),
         }
     }
 }
