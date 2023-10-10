@@ -1,74 +1,93 @@
 use crate::ast::{Node, Operation};
+use std::rc::Rc;
 
 #[LALR]
 grammar;
 
 pub GP = StmtList;
 
-StmtList: Box<Node> = List<Stmt> => Box::new(Node::Block(<>));
+StmtList: Rc<Node> = List<Stmt> => Rc::new(Node::Block(<>));
 List<T>: Vec<T> =
     <mut v:(<T>)*> <e:T> => { v.push(e); v };
 
 Stmt = {
 	Block,
 	<Expr> "~~",
-	"(_Y_)" <Expr> <Block> => Box::new(Node::While(<>)),
-	"(.Y.)" <Expr> <Block> <(r"U+O+H+" <Block>)?> => Box::new(Node::IfElse(<>)),
+	"(_Y_)" <Expr> <Block> => Rc::new(Node::While(<>)),
+	"(.Y.)" <Expr> <Block> <(r"U+O+H+" <Block>)?> => Rc::new(Node::IfElse(<>)),
+	r"😭+" <Identifier> "(" <IdentifierList> ")" <Block> => Rc::new(Node::FunctionDefinition(<>)),
 }
 
-Block: Box<Node> = {
+Block: Rc<Node> = {
 	"Nya!" <StmtList> "nya~",
 }
 
 Expr = Set;
+ExprList = Comma<Expr>;
 
-Set: Box<Node> = {
-	<s:Identifier> ">///<" <e:Expr> => Box::new(Node::VarSet(s.to_string(), e)),
+Comma<T>: Vec<T> = {
+	<mut v:(<T> ",")*> <e:T?> => match e {
+		None => v,
+		Some(e) => {
+			v.push(e);
+			v
+		}
+	}
+}
+
+Set: Rc<Node> = {
+	<s:Identifier> ">///<" <e:Expr> => Rc::new(Node::VarSet(s.to_string(), e)),
 	MathExpr,
 }
 
-BinaryOp<Op, Next>: Box<Node> = {
-	BinaryOp<Op, Next> Op Next => Box::new(Node::BinaryOp(<>)),
+BinaryOp<Op, Next>: Rc<Node> = {
+	BinaryOp<Op, Next> Op Next => Rc::new(Node::BinaryOp(<>)),
 	Next,
 }
 
-MathExpr: Box<Node> = BinaryOp<MathOp, Term>;
+MathExpr: Rc<Node> = BinaryOp<MathOp, Term>;
 MathOp: Operation = {
 	":3" => Operation::Add,
 	">:3" => Operation::Sub,
 }
 
-Term: Box<Node> = BinaryOp<TermOp, Prefix>;
+Term: Rc<Node> = BinaryOp<TermOp, Prefix>;
 TermOp: Operation = {
 	r"[uU][wW][uU]" => Operation::Mul,
 	r"[oO][wW][oO]" => Operation::Div,
 	":P" => Operation::Mod,
 }
 
-Prefix: Box<Node> = {
-	"-" <Prefix> => Box::new(Node::UnaryNegate(<>)),
-	Factor,
+Prefix: Rc<Node> = {
+	"-" <Prefix> => Rc::new(Node::UnaryNegate(<>)),
+	Postfix,
 }
 
-Factor: Box<Node> = {
+Postfix: Rc<Node> = {
+	<Identifier> "(" <ExprList> ")" => Rc::new(Node::FunctionCall(<>)),
+	Factor,
+};
+
+Factor: Rc<Node> = {
 	Integer,
 	String,
-	Identifier => Box::new(Node::Identifier(<>.to_string())),
+	Identifier => Rc::new(Node::Identifier(<>)),
 	"(" <MathExpr> ")"
 }
 
-Integer: Box<Node> = r"8=*D" => Box::new(Node::Integer(<>.len() as i64 - 2));
-String: Box<Node> = {
+Integer: Rc<Node> = r"8=*D" => Rc::new(Node::Integer(<>.len() as i64 - 2));
+String: Rc<Node> = {
 	r#"/\*.*\*/"# => {
 		let mut str = <>.to_string();
 		str.pop();
 		str.pop();
 		str.remove(0);
 		str.remove(0);
-		Box::new(Node::String(str))
+		Rc::new(Node::String(str))
 	}
 }
-Identifier = r"[a-zA-Z_][a-zA-Z0-9_]*";
+Identifier: String = r"[a-zA-Z_][a-zA-Z0-9_]*" => <>.to_string();
+IdentifierList: Vec<String> = Comma<Identifier>;
 
 match {
 	r"[oO][wW][oO]",

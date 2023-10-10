@@ -1,7 +1,7 @@
 #![feature(let_chains)]
-
 use std::collections::HashMap;
 use std::fs::read_to_string;
+use std::rc::Rc;
 
 use std::{
     env::args,
@@ -21,6 +21,7 @@ enum Value {
     String(String),
     Err,
     None,
+    Function(Vec<String>, Rc<ast::Node>),
 }
 
 impl Value {
@@ -29,8 +30,8 @@ impl Value {
         match self {
             Integer(x) => *x != 0,
             String(x) => x.len() != 0,
-            Err => false,
-            None => false,
+            Err | None => false,
+            Function(_, _) => true,
         }
     }
 }
@@ -43,6 +44,7 @@ impl Debug for Value {
             String(v) => write!(fmt, "{:?}", v),
             Err => write!(fmt, "Err"),
             None => write!(fmt, "None"),
+            Function(args, _) => write!(fmt, "Fn({:?})", args),
         }
     }
 }
@@ -114,6 +116,31 @@ impl ast::Node {
                     }
                 }
             }
+
+            FunctionDefinition(name, args, block) => {
+                vars.insert(name.clone(), Value::Function(args.clone(), block.clone()));
+                vars.get(name).unwrap().clone()
+            }
+            FunctionCall(name, args) => match vars.clone().get(name) {
+                None => Value::Err,
+                Some(val) => match val {
+                    Value::Function(args_func, block) => {
+                        if args.len() != args_func.len() {
+                            return Value::Err;
+                        }
+
+                        let mut i = 0;
+                        for arg_name in args_func {
+                            let interpreted = args.get(i).unwrap().interpret(vars);
+                            vars.insert(arg_name.clone(), interpreted);
+                            i += 1;
+                        }
+
+                        block.interpret(vars)
+                    }
+                    _ => Value::Err,
+                },
+            },
         }
     }
 }

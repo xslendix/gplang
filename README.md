@@ -79,6 +79,17 @@ nya~ UOOOOOOHHHH Nya!
 nya~
 ```
 
+##### function definitions >///<
+
+functions can be defines wike this:
+```
+😭😭😭😭😭😭 function_name(arg1, arg2, arg69) Nya!
+    arg1 :3 arg2 :3 arg69~~
+nya~
+
+function_name(8=D, 8==D, 8====D)~~ "arg1, arg2, arg69 are set globally"
+```
+
 ## Wicense
 
 This pwowect is licensed undew the AGPLv3 Wicense - see the [LICENSE](LICENSE) file fow mowe detaiws.

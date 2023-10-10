@@ -1,16 +1,19 @@
 use std::fmt::{Debug, Formatter};
+use std::rc::Rc;
 
 pub enum Node {
-    BinaryOp(Box<Node>, Operation, Box<Node>),
-    UnaryNegate(Box<Node>),
+    BinaryOp(Rc<Node>, Operation, Rc<Node>),
+    UnaryNegate(Rc<Node>),
     Integer(i64),
     String(String),
     Identifier(String),
-    Block(Vec<Box<Node>>),
+    Block(Vec<Rc<Node>>),
 
-    VarSet(String, Box<Node>),
-    While(Box<Node>, Box<Node>),
-    IfElse(Box<Node>, Box<Node>, Option<Box<Node>>),
+    VarSet(String, Rc<Node>),
+    While(Rc<Node>, Rc<Node>),
+    IfElse(Rc<Node>, Rc<Node>, Option<Rc<Node>>),
+    FunctionDefinition(String, Vec<String>, Rc<Node>),
+    FunctionCall(String, Vec<Rc<Node>>),
 }
 
 impl Debug for Node {
@@ -26,6 +29,10 @@ impl Debug for Node {
             VarSet(name, v) => write!(fmt, "{} = {:?}", name, v),
             While(v, block) => write!(fmt, "While({:?})->{:?}", v, block),
             IfElse(a, b, c) => write!(fmt, "If({:?})->{:?}->{:?}", a, b, c),
+            FunctionDefinition(name, args, block) => {
+                write!(fmt, "Fn({}, {:?}, {:?})", name, args, block)
+            }
+            FunctionCall(a, b) => write!(fmt, "{}({:?})", a, b),
         }
     }
 }
