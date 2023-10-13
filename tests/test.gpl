@@ -15,14 +15,14 @@ sum >///< 8D~~
 nya~
 
 "Return the sum"
-sum~~
+print(sum)~~
 
 "Remove 16 for it, failure case"
-sum >///< sum >:3 8================D~~
+"sum >///< sum >:3 8================D~~"
 
 (.Y.) sum Nya!
-	8=D~~
+	print(8=D)~~
 nya~ UUOOOOOHHHHHH Nya!
-	8D~~
+	print(8D)~~
 nya~
 

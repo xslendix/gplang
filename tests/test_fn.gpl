@@ -2,5 +2,7 @@
 	a :3 b~~
 nya~
 
-function(8=D, 8=D)~~
+first >///< readlnn(/*Enter first number: */)~~
+second >///< readlnn(/*Enter second number: */)~~
+print(function(first, second))~~
 
